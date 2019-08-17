@@ -14,6 +14,7 @@ public class Pais {
 	public Long superficieMaritima;
 	
 	private List<DivisionPolitica> divisiones;
+	private List<RegionBiologica> regiones;
 	
 	public Pais() {}
 
@@ -56,6 +57,14 @@ public class Pais {
 
 	public void setDivisiones(List<DivisionPolitica> divisiones) {
 		this.divisiones = divisiones;
+	}
+
+	public List<RegionBiologica> getRegiones() {
+		return regiones;
+	}
+
+	public void setRegiones(List<RegionBiologica> regiones) {
+		this.regiones = regiones;
 	}
 
 	@Override

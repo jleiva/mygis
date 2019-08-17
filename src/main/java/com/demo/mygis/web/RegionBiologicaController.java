@@ -19,62 +19,63 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.mygis.domain.DivisionPolitica;
 import com.demo.mygis.domain.Pais;
-import com.demo.mygis.repository.DivisionPoliticaRepository;
+import com.demo.mygis.domain.RegionBiologica;
 import com.demo.mygis.repository.PaisRepository;
+import com.demo.mygis.repository.RegionBiologicaRepository;
 
 @RestController
-@RequestMapping(path="/v1/divisiones_politicas")
-public class DivisionPoliticaController {
+@RequestMapping(path="/v1/regiones_biologicas")
+public class RegionBiologicaController {
 	@Autowired
-	private DivisionPoliticaRepository repository;
+	private RegionBiologicaRepository repository;
 	
 	@Autowired
 	private PaisRepository paisRepository;
 	
 	@GetMapping
-	public List<DivisionPolitica> getAll() {
+	public List<RegionBiologica> getAll() {
 		return repository.findAll();
 	}
 	
 	@GetMapping(path = {"/{id}"})
-	public ResponseEntity<DivisionPolitica> findById(@PathVariable String id) {
+	public ResponseEntity<RegionBiologica> findById(@PathVariable String id) {
 		return repository.findById(id)
 		          .map(record ->
 		ResponseEntity.ok().body(record)) .orElse(ResponseEntity.notFound().build());
 	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public List<DivisionPolitica> findByPais(@RequestParam (value = "paisId") String paisId, Model model) {
+	public List<RegionBiologica> findByPais(@RequestParam (value = "paisId") String paisId, Model model) {
 		return repository.findByPaisId(paisId);
 
 	}
 	
 	@RequestMapping(value = "/buscar", method = RequestMethod.GET)
-	public List<DivisionPolitica> findByName(@RequestParam (value = "nombre") String nombre, Model model) {
+	public List<RegionBiologica> findByName(@RequestParam (value = "nombre") String nombre, Model model) {
 		return repository.findByNombreLike(nombre);
 
 	}
 	
 	@PostMapping
-	public ResponseEntity<String> add(@RequestBody DivisionPolitica division){ 
-		Optional<Pais> pais = paisRepository.findById(division.getPaisId());
+	public ResponseEntity<String> add(@RequestBody RegionBiologica region){ 
+		Optional<Pais> pais = paisRepository.findById(region.getPaisId());
 		
 		if (pais.isPresent()) {
-			repository.save(division);
+			repository.save(region);
 			
 			pais.map(record -> {
-				List<DivisionPolitica> divisiones = record.getDivisiones();
+				List<RegionBiologica> regiones = record.getRegiones();
 				
-				if (divisiones != null) {
-					divisiones.add(division);
+				if (regiones != null) {
+					regiones.add(region);
 					
-					record.setDivisiones(divisiones);
+					record.setRegiones(regiones);
 	
 				} else {
-					List<DivisionPolitica> divisiones2 = new ArrayList<DivisionPolitica>();
+					List<RegionBiologica> regiones2 = new ArrayList<RegionBiologica>();
 					
-					divisiones2.add(division);
-					record.setDivisiones(divisiones2);
+					regiones2.add(region);
+					record.setRegiones(regiones2);
 				}
 				
 				paisRepository.save(record);

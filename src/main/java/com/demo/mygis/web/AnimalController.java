@@ -34,9 +34,8 @@ public class AnimalController {
 	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ResponseEntity<Animal> findByName(@RequestParam (value = "nombre") String nombre, Model model) {
-		return repository.findByNombreComunLike(nombre).map(record ->
-		ResponseEntity.ok().body(record)) .orElse(ResponseEntity.notFound().build());
+	public List<Animal> findByName(@RequestParam (value = "nombre") String nombre, Model model) {
+		return repository.findByNombreComunLike(nombre);
 
 	}
 	
