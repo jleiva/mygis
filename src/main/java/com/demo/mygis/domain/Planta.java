@@ -8,6 +8,7 @@ public class Planta {
 	
 	public String nombreComun;
 	public String nombreCientifico;
+	public String regionId;
 	public boolean enPeligroExtincion;
 	public String url = "/v1/animales";
 	
@@ -46,6 +47,16 @@ public class Planta {
 
 	public void setEnPeligroExtincion(boolean enPeligroExtincion) {
 		this.enPeligroExtincion = enPeligroExtincion;
+	}
+
+
+	public String getRegionId() {
+		return regionId;
+	}
+
+
+	public void setRegionId(String regionId) {
+		this.regionId = regionId;
 	}
 	
 	

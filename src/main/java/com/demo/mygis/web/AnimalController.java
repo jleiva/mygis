@@ -1,6 +1,8 @@
 package com.demo.mygis.web;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,13 +20,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.mygis.domain.Animal;
+import com.demo.mygis.domain.Pais;
+import com.demo.mygis.domain.RegionBiologica;
 import com.demo.mygis.repository.AnimalRepository;
+import com.demo.mygis.repository.RegionBiologicaRepository;
 
 @RestController
 @RequestMapping(path="/v1/animales")
 public class AnimalController {
 	@Autowired
 	private AnimalRepository repository;
+	
+	@Autowired
+	private RegionBiologicaRepository regionRepository;
 	
 	@GetMapping(path = {"/{id}"})
 	public ResponseEntity<Animal> findById(@PathVariable String id) {
@@ -45,9 +53,37 @@ public class AnimalController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<String> add(@RequestBody Animal animal){ 
-		repository.save(animal);
-		return new ResponseEntity<>(HttpStatus.CREATED);
+	public ResponseEntity<String> add(@RequestBody Animal animal) {
+		Optional<RegionBiologica> region = regionRepository.findById(animal.getRegionId());
+		
+		if (region.isPresent()) {
+			repository.save(animal);
+			
+			region.map(record -> {
+				List<Animal> animales = record.getAnimales();
+				
+				if (animales != null) {
+					animales.add(animal);
+					
+					record.setAnimales(animales);
+	
+				} else {
+					List<Animal> animales2 = new ArrayList<Animal>();
+					
+					animales2.add(animal);
+					record.setAnimales(animales2);
+				}
+				
+				regionRepository.save(record);
+				
+				return record;
+			});
+			
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}
+				
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
 	}
 	
 	@PutMapping("/{id}")
