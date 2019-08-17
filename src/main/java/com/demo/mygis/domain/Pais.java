@@ -1,5 +1,7 @@
 package com.demo.mygis.domain;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 
 public class Pais {
@@ -10,6 +12,8 @@ public class Pais {
 	public String continente;
 	public Long superficieTerrestre;
 	public Long superficieMaritima;
+	
+	private List<DivisionPolitica> divisiones;
 	
 	public Pais() {}
 
@@ -45,6 +49,15 @@ public class Pais {
 		this.superficieMaritima = superficieMaritima;
 	}
 	
+	
+	public List<DivisionPolitica> getDivisiones() {
+		return divisiones;
+	}
+
+	public void setDivisiones(List<DivisionPolitica> divisiones) {
+		this.divisiones = divisiones;
+	}
+
 	@Override
 	public String toString() {
 		return "Pais {" +
