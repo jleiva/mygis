@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.demo.mygis.domain.DivisionPolitica;
 import com.demo.mygis.domain.Pais;
 import com.demo.mygis.domain.RegionBiologica;
 import com.demo.mygis.repository.PaisRepository;
